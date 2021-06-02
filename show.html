@@ -40,53 +40,61 @@ and open the template in the editor.
                     <input type="email" class="form-control" id="empEmail"
                     placeholder="Enter Employee Email" name="empEmail">
                 </div>
-                    <input type="button" class="btn btn-primary" id="empSave" value="Save"
-                        onclick="saveEmployee();">
+                    <input type="button" class="btn btn-primary" id="empSave" value="Show"
+                        onclick="showEmployee();">
             </form>
+            <div id="result" class="row"></div>
         </div>
         <script>
             $("#empId").focus();
 
             function validateAndGetFormData() {
                 var empIdVar = $("#empId").val();
-                if (empIdVar === "") {
-                    alert("Employee ID Required Value");
-                    $("#empId").focus();
-                    return "";
+                var jsonStrObj;
+
+                if(empIdVar !== ""){
+                    jsonStrObj = {
+                        id: empIdVar
+                    };
+                    return JSON.stringify(jsonStrObj);
                 }
+                
                 var empNameVar = $("#empName").val();
-                if (empNameVar === "") {
-                    alert("Employee Name is Required Value");
-                    $("#empName").focus();
-                    return "";
+                if(empNameVar !== ""){
+                    jsonStrObj = {
+                        name: empNameVar
+                    };
+                    return JSON.stringify(jsonStrObj);
                 }
+
+                
                 var empEmailVar = $("#empEmail").val();
-                if (empEmailVar === "") {
-                    alert("Employee Email is Required Value");
-                    $("#empEmail").focus();
-                    return "";
+                if(empEmailVar !== ""){
+                    jsonStrObj = {
+                        email: empEmailVar
+                    };
+                    return JSON.stringify(jsonStrObj);
                 }
-                var jsonStrObj = {
-                    id: empIdVar,
-                    name: empNameVar,
-                    email: empEmailVar,
-                };
-                return JSON.stringify(jsonStrObj);
+
+                alert("Any One Field is Required!");
+                $("#empId").focus();
+                return "";
+
             }
-
-
             // This method is used to create PUT Json request.
 
-            function createPUTRequest(connToken, jsonObj, dbName, relName) {
+            function createGETRequest(connToken, jsonObj, dbName, relName) {
                 var putRequest = "{\n"
                 + "\"token\" : \""
                 + connToken
                 + "\","
                 + "\"dbName\": \""
                 + dbName
-                + "\",\n" + "\"cmd\" : \"PUT\",\n"
+                + "\",\n" + "\"cmd\" : \"GET_BY_KEY\",\n"
                 + "\"rel\" : \""
                 + relName + "\","
+                + "\"createTime\" : true,"
+                + "\"updateTime\" : true,"
                 + "\"jsonStr\": \n"
                 + jsonObj
                 + "\n"
@@ -94,6 +102,8 @@ and open the template in the editor.
 
                 return putRequest;
             }
+
+            
 
             function executeCommand(reqString, dbBaseUrl, apiEndPointUrl) {
                 var url = dbBaseUrl + apiEndPointUrl;
@@ -113,19 +123,20 @@ and open the template in the editor.
                 $("#empEmail").val("");
                 $("#empId").focus();
             }
-            function saveEmployee() {
+            function showEmployee() {
                 var jsonStr = validateAndGetFormData();
                 if (jsonStr === "") {
                 return;
                 }
 
-                var putReqStr = createPUTRequest("90935577|-31948842177160476|90933700",jsonStr, "Employee", "index");
+                var putReqStr = createGETRequest("90935577|-31948842177160476|90933700",jsonStr, "Employee", "index");
                 
                 alert(putReqStr);
 
                 jQuery.ajaxSetup({async: false});
-                var resultObj = executeCommandAtGivenBaseUrl(putReqStr,"http://api.login2explore.com:5577", "/api/iml");
+                var resultObj = executeCommand(putReqStr,"http://api.login2explore.com:5577", "/api/irl");
                 alert(JSON.stringify(resultObj));
+                document.getElementById("result").innerHTML = JSON.stringify(resultObj);
                 jQuery.ajaxSetup({async: true});
 
                 resetForm();
