@@ -19,7 +19,7 @@ DataBase
 
 
 ## Short Overview of JsonPowerDB:
-#####*JsonPowerDB* is a Database Server with lightweight, simple , easy-to-use, developer API's which provides modern day solution to store and retrieve data of different models i.e. _RDBMS_, _Documnet based_, _Key-value_, _spatial_, etc. in a single database.
+*#####JsonPowerDB* is a Database Server with lightweight, simple , easy-to-use, developer API's which provides modern day solution to store and retrieve data of different models i.e. _RDBMS_, _Documnet based_, _Key-value_, _spatial_, etc. in a single database.
 
 
 ### Advantages of **JsonPowerDB**
